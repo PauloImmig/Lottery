@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  lottery.api:
+    image: ${DOCKER_REGISTRY-}lotteryapi
+    build:
+      context: .
+      dockerfile: src/Lottery.Api/Dockerfile
+    depends_on:
+      - "sql-server"
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    hostname: sql-server
+    container_name: sql-server
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=pwd!123456A*
+      - MSSQL_PID=Express
