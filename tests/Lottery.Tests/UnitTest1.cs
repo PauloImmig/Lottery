@@ -11,11 +11,7 @@ namespace Lottery.Tests
         [Fact]
         public void Test1()
         {
-            var fileParser = new FileParser(new FileStream(@"D:\temp\chipart\sorteio-upgrade-chipart-e-pcyes_export.csv", FileMode.Open));
-            foreach (var item in fileParser.GetRows())
-            {
-                System.Diagnostics.Debug.WriteLine(item);
-            };
+            
         }
     }
 }
