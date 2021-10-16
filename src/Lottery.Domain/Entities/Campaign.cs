@@ -24,10 +24,13 @@ namespace Lottery.Domain.Entities
 
         public virtual CampaignEmailTemplate EmailTemplate { get; private set; }
 
-        public void SetEmailTemplate(CampaignEmailTemplate emailTemplate)
-        {
-            EmailTemplate = emailTemplate;
-        }
+        public bool Active { get; private set; } = true;
+
+        public void SetEmailTemplate(CampaignEmailTemplate emailTemplate) => EmailTemplate = emailTemplate;
+
+        public void Activate() => Active = true;
+
+        public void Inactivate() => Active = false;
     }
 
     public class CampaignPeriod

@@ -1,5 +1,5 @@
 using Lotter.Infrastructurey.Data.Module;
-using Lottery.Entities.UseCases;
+using Lottery.Domain.UseCases;
 using Lottery.Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using AutoMapper;
+using System.Reflection;
+using FluentValidation.AspNetCore;
 
 namespace Lottery.Api
 {
@@ -36,7 +39,15 @@ namespace Lottery.Api
             });
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddDataModule();
-            services.AddTransient<TestUseCase>();
+            services.AddTransient<ManageCampaign>();
+
+            var assembly = Assembly.GetAssembly(this.GetType());
+
+            var mapperConfig = new MapperConfiguration(cfg => cfg.AddMaps(assembly));
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            services.AddFluentValidation(x => x.RegisterValidatorsFromAssembly(assembly));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

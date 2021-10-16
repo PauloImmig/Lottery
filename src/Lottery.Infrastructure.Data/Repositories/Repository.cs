@@ -24,13 +24,15 @@ namespace Lottery.Infrastructure.Data.Repositories
         {
             return _dbContext.Set<TEntity>();
         }
-        public void Insert(TEntity entity)
+        public TEntity Insert(TEntity entity)
         {
-            _dbSet.Add(entity);
+            var result = _dbSet.Add(entity);
+            return result.Entity;
         }
-        public void Update(TEntity entity)
+        public TEntity Update(TEntity entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
+            return entity;
         }
         public void Delete(TEntity entity)
         {
