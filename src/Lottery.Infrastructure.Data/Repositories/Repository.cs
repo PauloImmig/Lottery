@@ -1,7 +1,9 @@
 ﻿using Lottery.SharedKernel.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Lottery.Infrastructure.Data.Repositories
@@ -40,5 +42,7 @@ namespace Lottery.Infrastructure.Data.Repositories
         }
 
         public IQueryable<TEntity> Queryable() => _dbSet;
+
+        public IQueryable<TEntity> Queryable<TProperty>(Expression<Func<TEntity, TProperty>> navigationPropertyPath) => _dbSet.Include(navigationPropertyPath);
     }
 }

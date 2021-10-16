@@ -27,25 +27,30 @@ namespace Lottery.Api.Controllers
         }
 
         // GET: api/<CampaignController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet(Name = "GetAllCampaigns")]
+        [ProducesResponseType(typeof(GetAllCampaignsResponse), StatusCodes.Status200OK)]
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            var campaigns = _manageCampaign.GetAllCampaigns();
+            var result = _mapper.Map<IEnumerable<Campaign>, List<GetAllCampaignsResponse>>(campaigns);
+            return Ok(result);
         }
 
         // GET api/<CampaignController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id}", Name = "GetCampainById")]
+        [ProducesResponseType(typeof(GetCampaignByIdResponse), StatusCodes.Status200OK)]
+        public IActionResult Get(Guid id)
         {
-            return "value";
+            var campaigns = _manageCampaign.GetCampaignById(id);
+            var result = _mapper.Map<Campaign, GetCampaignByIdResponse>(campaigns);
+            return Ok(result);
         }
 
         // POST api/<CampaignController>
-        [HttpPost]
+        [HttpPost("CreateCampaign")]
         [ProducesResponseType(typeof(CreateCampaignResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
         public async Task<IActionResult> Post([FromBody] CreateCampaignRequest createCampaignRequest)
         {
             var campaign = new Campaign(new CampaignPeriod(
@@ -58,15 +63,23 @@ namespace Lottery.Api.Controllers
         }
 
         // PUT api/<CampaignController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{id}/email-template", Name = "SetCampaignEmailTemplate")]
+        public async Task<IActionResult> Put(Guid id, [FromBody] SetCampaignEmailTemplateRequest setCampaignEmailTemplateRequest)
         {
+            CampaignEmailTemplate campaignEmailTemplate = new(setCampaignEmailTemplateRequest.Subject,
+                                                              setCampaignEmailTemplateRequest.Content,
+                                                              new EmailContentPlaceholders(setCampaignEmailTemplateRequest.Placeholders));
+
+            var newCampaign = await _manageCampaign.SetCampaignEmailTemplate(id, campaignEmailTemplate);
+            return Ok();
         }
 
         // DELETE api/<CampaignController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{id}", Name = "InactivateCampaign")]
+        public async Task<IActionResult> Delete(Guid id)
         {
+            await _manageCampaign.InactivateCampaign(id);
+            return Ok();
         }
     }
 }

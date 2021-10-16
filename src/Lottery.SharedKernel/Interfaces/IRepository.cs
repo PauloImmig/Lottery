@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Lottery.SharedKernel.Interfaces
@@ -12,5 +14,6 @@ namespace Lottery.SharedKernel.Interfaces
         TEntity Update(TEntity entity);
         void Delete(TEntity entity);
         IQueryable<TEntity> Queryable();
+        IQueryable<TEntity> Queryable<TProperty>(Expression<Func<TEntity, TProperty>> navigationPropertyPath);
     }
 }

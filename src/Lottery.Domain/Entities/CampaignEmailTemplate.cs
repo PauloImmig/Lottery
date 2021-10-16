@@ -6,12 +6,12 @@ namespace Lottery.Domain.Entities
 {
     public class CampaignEmailTemplate : Entity
     {
-        private CampaignEmailTemplate()
+        private CampaignEmailTemplate() : base()
         {
 
         }
 
-        public CampaignEmailTemplate(EmailSubject subject, EmailContent content, EmailContentPlaceholders placeholders)
+        public CampaignEmailTemplate(EmailSubject subject, EmailContent content, EmailContentPlaceholders placeholders) : base()
         {
             Subject = subject;
             Content = content;
@@ -89,7 +89,7 @@ namespace Lottery.Domain.Entities
 
         private static void ValidatePlaceholders(string[] value)
         {
-            bool hasRepeatedPlaceholders = value?.GroupBy(x => x).Any(x => x.Key.Length > 1) ?? false;
+            bool hasRepeatedPlaceholders = value?.GroupBy(x => x).Any(x => x.Count() > 1) ?? false;
             if (hasRepeatedPlaceholders) throw new ArgumentException($"{nameof(EmailContentPlaceholders)} can't have repeated values.", nameof(value));
         }
 
