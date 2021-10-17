@@ -47,7 +47,7 @@ namespace Lottery.Api.Controllers
         }
 
         // POST api/<CampaignController>
-        [HttpPost("CreateCampaign")]
+        [HttpPost(Name = "CreateCampaign")]
         [ProducesResponseType(typeof(CreateCampaignResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

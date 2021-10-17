@@ -1,4 +1,5 @@
 ﻿using Lottery.Entities.Models;
+using Lottery.SharedKernel.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -23,7 +24,8 @@ namespace Lottery.Infrastructure.Data.Mapping
             builder.Property(c => c.Mail)
                 .HasColumnType("varchar(500)")
                 .HasMaxLength(500)
-                .IsRequired();
+                .IsRequired()
+                .HasConversion(x => x.ToString(), x => new EmailAddress(x));
 
             builder.Property(c => c.Action)
                 .HasColumnType("varchar(500)")
@@ -78,7 +80,8 @@ namespace Lottery.Infrastructure.Data.Mapping
             builder.Property(c => c.Status)
                 .HasColumnType("varchar(500)")
                 .HasMaxLength(500)
-                .IsRequired();
+                .IsRequired()
+                .HasConversion(x => x.ToString(), x => x);
 
             builder.Property(c => c.Twitter)
                 .HasColumnType("varchar(500)")
@@ -93,6 +96,11 @@ namespace Lottery.Infrastructure.Data.Mapping
                 .HasMaxLength(500)
                 .IsRequired();
 
+            builder.Property(c => c.LuckyNumber);
+
+            builder.HasOne(c => c.Campaign)
+                .WithMany(x => x.Participants)
+                .HasForeignKey(c => c.CampaignId);
         }
     }
 }

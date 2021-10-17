@@ -9,6 +9,7 @@ namespace Lottery.Api.Profiles
         public GetAllCampaignsResponseProfile()
         {
             CreateMap<Campaign, GetAllCampaignsResponse>()
+                .ForMember(dest => dest.Id, m => m.MapFrom(x => x.Id))
                 .ForMember(dest => dest.Name, m => m.MapFrom(x => x.Name))
                 .ForMember(dest => dest.StartDate, m => m.MapFrom(x => x.Period.StartDate))
                 .ForMember(dest => dest.EndDate, m => m.MapFrom(x => x.Period.EndDate))

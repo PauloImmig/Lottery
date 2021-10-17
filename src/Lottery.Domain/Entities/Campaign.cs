@@ -1,6 +1,9 @@
 ﻿using Lottery.SharedKernel.Interfaces;
 using Lottery.SharedKernel;
 using System;
+using System.Collections.Generic;
+using Lottery.Entities.Models;
+using System.Collections.ObjectModel;
 
 namespace Lottery.Domain.Entities
 {
@@ -26,6 +29,18 @@ namespace Lottery.Domain.Entities
 
         public bool Active { get; private set; } = true;
 
+        private ICollection<Participant> _participants = new List<Participant>();
+        public virtual IReadOnlyCollection<Participant> Participants
+        {
+            get
+            {
+                return (IReadOnlyCollection<Participant>)_participants;
+            }
+            private set
+            {
+                _participants = (ICollection<Participant>)value;
+            }
+        }
         public void SetEmailTemplate(CampaignEmailTemplate emailTemplate) => EmailTemplate = emailTemplate;
 
         public void Activate() => Active = true;
